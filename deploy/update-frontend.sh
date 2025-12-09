@@ -3,7 +3,7 @@
 
 echo "Updating ProjectHub Frontend..."
 
-cd /home/ubuntu/projecthub
+cd /home/ubuntu/Multi-Tenancy-Application
 git pull
 
 cd frontend

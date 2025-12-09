@@ -23,17 +23,17 @@ deploy/
 1. SSH into your backend EC2 instance
 2. Run the setup script:
    ```bash
-   cd /home/ubuntu/projecthub
+   cd /home/ubuntu/Multi-Tenancy-Application
    chmod +x deploy/setup-backend.sh
    ./deploy/setup-backend.sh
    ```
 3. Edit the `.env` file with your credentials:
    ```bash
-   nano /home/ubuntu/projecthub/backend/.env
+   nano /home/ubuntu/Multi-Tenancy-Application/backend/.env
    ```
 4. Run migrations and start services:
    ```bash
-   cd /home/ubuntu/projecthub/backend
+   cd /home/ubuntu/Multi-Tenancy-Application/backend
    source venv/bin/activate
    python manage.py migrate_schemas --shared
    python manage.py collectstatic --noinput
@@ -47,7 +47,7 @@ deploy/
 1. SSH into your frontend EC2 instance
 2. Run the setup script:
    ```bash
-   cd /home/ubuntu/projecthub
+   cd /home/ubuntu/Multi-Tenancy-Application
    chmod +x deploy/setup-frontend.sh
    ./deploy/setup-frontend.sh
    ```
@@ -56,21 +56,21 @@ deploy/
 3. Install SSL certificate:
    ```bash
    sudo apt install -y certbot python3-certbot-nginx
-   sudo certbot --nginx -d sunnysb21.site -d *.sunnysb21.site
+   sudo certbot --nginx -d sunnysb21.site -d *.sunnysb21.site -d api.sunnysb21.site
    ```
 
 ## Updating Deployed Code
 
 ### Update Backend
 ```bash
-cd /home/ubuntu/projecthub
+cd /home/ubuntu/Multi-Tenancy-Application
 chmod +x deploy/update-backend.sh
 ./deploy/update-backend.sh
 ```
 
 ### Update Frontend
 ```bash
-cd /home/ubuntu/projecthub
+cd /home/ubuntu/Multi-Tenancy-Application
 chmod +x deploy/update-frontend.sh
 ./deploy/update-frontend.sh
 ```

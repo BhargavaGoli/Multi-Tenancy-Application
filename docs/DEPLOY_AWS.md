@@ -245,12 +245,12 @@ This Nginx runs *locally* on the backend to handle static files and pass dynamic
 
         # Static files (Served directly by Nginx for speed)
         location /static/ {
-            alias /home/ubuntu/projecthub/backend/staticfiles/;
+            alias /home/ubuntu/Multi-Tenancy-Application/backend/staticfiles/;
         }
 
         # Media files (User uploads)
         location /media/ {
-            alias /home/ubuntu/projecthub/backend/media/;
+            alias /home/ubuntu/Multi-Tenancy-Application/backend/media/;
         }
 
         # Pass everything else to Gunicorn
@@ -285,8 +285,8 @@ We want Django to run automatically in the background.
     [Service]
     User=ubuntu
     Group=www-data
-    WorkingDirectory=/home/ubuntu/projecthub/backend
-    ExecStart=/home/ubuntu/projecthub/backend/venv/bin/gunicorn \
+    WorkingDirectory=/home/ubuntu/Multi-Tenancy-Application/backend
+    ExecStart=/home/ubuntu/Multi-Tenancy-Application/backend/venv/bin/gunicorn \
             --workers 3 \
             --bind 127.0.0.1:8001 \
             projecthub.wsgi:application
@@ -356,7 +356,7 @@ This is the most critical part. This Nginx routes traffic.
         server_name sunnysb21.site *.sunnysb21.site; # Wildcard for tenants
 
         # Serve React Build
-        root /home/ubuntu/projecthub/frontend/dist;
+        root /home/ubuntu/Multi-Tenancy-Application/frontend/dist;
         index index.html;
 
         # --- Proxy Routes ---
@@ -410,11 +410,14 @@ This is the most critical part. This Nginx routes traffic.
 ### 7.1 Update DNS Records
 Go to your domain registrar (e.g., GoDaddy, Cloudflare).
 
-1.  **A Record**:
+1.  **A Record** (Root domain):
     *   **Name**: `@` (or blank)
     *   **Value**: `FRONTEND_PUBLIC_IP` (e.g., 54.12.34.56)
-2.  **A Record** (Wildcard):
+2.  **A Record** (Wildcard for tenants):
     *   **Name**: `*`
+    *   **Value**: `FRONTEND_PUBLIC_IP`
+3.  **A Record** (API subdomain):
+    *   **Name**: `api`
     *   **Value**: `FRONTEND_PUBLIC_IP`
 
 *Wait 5-10 minutes for DNS to propagate.*
@@ -425,7 +428,7 @@ We run Certbot on the **Frontend Server**.
 ```bash
 # On Frontend SSH session
 sudo apt install -y certbot python3-certbot-nginx
-sudo certbot --nginx -d sunnysb21.site -d *.sunnysb21.site
+sudo certbot --nginx -d sunnysb21.site -d *.sunnysb21.site -d api.sunnysb21.site
 ```
 Follow the prompts (enter email, agree to terms). Certbot will automatically update your Nginx config to force HTTPS.
 
@@ -438,7 +441,7 @@ Your infrastructure is ready. Now lets creates the first tenant.
 1.  **Switch to Backend SSH**.
 2.  Run the tenant creation command (if you have a script) or via Shell:
     ```bash
-    cd /home/ubuntu/projecthub/backend
+    cd /home/ubuntu/Multi-Tenancy-Application/backend
     source venv/bin/activate
     python manage.py shell
     ```
@@ -460,7 +463,8 @@ Your infrastructure is ready. Now lets creates the first tenant.
 
 ### Testing Checklist
 1.  Visit `https://sunnysb21.site` -> Should see React Landing Page.
-2.  Visit `https://sunnysb21.site/admin` -> Should see Django Admin login.
-3.  Visit `https://demo.sunnysb21.site` -> Should see React App (Tenant context).
+2.  Visit `https://api.sunnysb21.site/api/docs/` -> Should see Swagger API Documentation.
+3.  Visit `https://sunnysb21.site/admin` -> Should see Django Admin login.
+4.  Visit `https://demo.sunnysb21.site` -> Should see React App (Tenant context).
 
 **🎉 Congratulations! You have deployed a professional Multi-Tenant SaaS on AWS!**

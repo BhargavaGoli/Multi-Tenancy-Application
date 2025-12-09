@@ -5,9 +5,9 @@ After=network.target
 [Service]
 User=ubuntu
 Group=www-data
-WorkingDirectory=/home/ubuntu/projecthub/backend
-Environment="PATH=/home/ubuntu/projecthub/backend/venv/bin"
-ExecStart=/home/ubuntu/projecthub/backend/venv/bin/gunicorn \
+WorkingDirectory=/home/ubuntu/Multi-Tenancy-Application/backend
+Environment="PATH=/home/ubuntu/Multi-Tenancy-Application/backend/venv/bin"
+ExecStart=/home/ubuntu/Multi-Tenancy-Application/backend/venv/bin/gunicorn \
           --workers 3 \
           --bind 127.0.0.1:8001 \
           --timeout 120 \

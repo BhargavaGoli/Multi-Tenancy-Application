@@ -24,23 +24,23 @@ sudo apt install -y nodejs
 # Clone repository
 echo "Step 4: Cloning repository..."
 cd /home/ubuntu
-if [ ! -d "projecthub" ]; then
+if [ ! -d "Multi-Tenancy-Application" ]; then
     read -p "Enter your GitHub repository URL: " REPO_URL
-    git clone $REPO_URL projecthub
+    git clone $REPO_URL Multi-Tenancy-Application
 fi
 
 # Build React app
 echo "Step 5: Building React application..."
-cd /home/ubuntu/projecthub/frontend
+cd /home/ubuntu/Multi-Tenancy-Application/frontend
 npm install
 npm run build
 
 # Setup Nginx
 echo "Step 6: Configuring Nginx..."
 read -p "Enter Backend Private IP (e.g., 172.31.10.5): " BACKEND_IP
-sudo cp /home/ubuntu/projecthub/deploy/nginx/frontend.conf /etc/nginx/sites-available/projecthub
-sudo sed -i "s/BACKEND_PRIVATE_IP/$BACKEND_IP/g" /etc/nginx/sites-available/projecthub
-sudo ln -sf /etc/nginx/sites-available/projecthub /etc/nginx/sites-enabled/
+sudo cp /home/ubuntu/Multi-Tenancy-Application/deploy/nginx/frontend.conf /etc/nginx/sites-available/Multi-Tenancy-Application
+sudo sed -i "s/BACKEND_PRIVATE_IP/$BACKEND_IP/g" /etc/nginx/sites-available/Multi-Tenancy-Application
+sudo ln -sf /etc/nginx/sites-available/Multi-Tenancy-Application /etc/nginx/sites-enabled/
 sudo rm -f /etc/nginx/sites-enabled/default
 sudo nginx -t
 sudo systemctl restart nginx
@@ -54,5 +54,5 @@ echo "Next steps:"
 echo "1. Point your domain DNS to this server's public IP"
 echo "2. Install SSL certificate:"
 echo "   sudo apt install -y certbot python3-certbot-nginx"
-echo "   sudo certbot --nginx -d sunnysb21.site -d *.sunnysb21.site"
+echo "   sudo certbot --nginx -d sunnysb21.site -d *.sunnysb21.site -d api.sunnysb21.site"
 echo ""

@@ -4,7 +4,7 @@
 
 echo "Updating ProjectHub Backend..."
 
-cd /home/ubuntu/projecthub
+cd /home/ubuntu/Multi-Tenancy-Application
 git pull
 
 cd backend
