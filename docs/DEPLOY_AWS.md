@@ -207,7 +207,7 @@ DEBUG=False
 
 # Allowed Hosts: Localhost + Private IPs + Domain
 # IMPORTANT: Add the PRIVATE IP of the Frontend instance here later if needed, or allow all internal IPs
-ALLOWED_HOSTS=localhost,127.0.0.1,.yourdomain.com,172.31.*.*
+ALLOWED_HOSTS=localhost,127.0.0.1,.sunnysb21.site,172.31.*.*
 
 # Database Config (Use the RDS Endpoint you copied)
 DATABASE_NAME=projecthub
@@ -353,7 +353,7 @@ This is the most critical part. This Nginx routes traffic.
 
     server {
         listen 80;
-        server_name yourdomain.com *.yourdomain.com; # Wildcard for tenants
+        server_name sunnysb21.site *.sunnysb21.site; # Wildcard for tenants
 
         # Serve React Build
         root /home/ubuntu/projecthub/frontend/dist;
@@ -425,7 +425,7 @@ We run Certbot on the **Frontend Server**.
 ```bash
 # On Frontend SSH session
 sudo apt install -y certbot python3-certbot-nginx
-sudo certbot --nginx -d yourdomain.com -d *.yourdomain.com
+sudo certbot --nginx -d sunnysb21.site -d *.sunnysb21.site
 ```
 Follow the prompts (enter email, agree to terms). Certbot will automatically update your Nginx config to force HTTPS.
 
@@ -448,19 +448,19 @@ Your infrastructure is ready. Now lets creates the first tenant.
     # Create Public Tenant
     tenant = Client(schema_name='public', name='Public Tenant')
     tenant.save()
-    dom = Domain(domain='yourdomain.com', tenant=tenant, is_primary=True)
+    dom = Domain(domain='sunnysb21.site', tenant=tenant, is_primary=True)
     dom.save()
 
     # Create a Test Tenant
     t2 = Client(schema_name='demo', name='Demo Tenant')
     t2.save()
-    d2 = Domain(domain='demo.yourdomain.com', tenant=t2, is_primary=True)
+    d2 = Domain(domain='demo.sunnysb21.site', tenant=t2, is_primary=True)
     d2.save()
     ```
 
 ### Testing Checklist
-1.  Visit `https://yourdomain.com` -> Should see React Landing Page.
-2.  Visit `https://yourdomain.com/admin` -> Should see Django Admin login.
-3.  Visit `https://demo.yourdomain.com` -> Should see React App (Tenant context).
+1.  Visit `https://sunnysb21.site` -> Should see React Landing Page.
+2.  Visit `https://sunnysb21.site/admin` -> Should see Django Admin login.
+3.  Visit `https://demo.sunnysb21.site` -> Should see React App (Tenant context).
 
 **🎉 Congratulations! You have deployed a professional Multi-Tenant SaaS on AWS!**
